@@ -1,4 +1,5 @@
 using Cafescore.Infrastructure.Data;
+using Cafescore.Infrastructure.Seed;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+// Seed do banco de dados
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await DatabaseSeeder.SeedAsync(context);
+}
 
 if (app.Environment.IsDevelopment())
 {
