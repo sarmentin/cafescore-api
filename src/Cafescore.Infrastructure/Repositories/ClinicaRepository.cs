@@ -15,7 +15,9 @@ public class ClinicaRepository : IClinicaRepository
     }
 
     public async Task<IEnumerable<Clinica>> ObterTodasAsync()
-        => await _context.Clinicas.ToListAsync();
+    => await _context.Clinicas
+        .Include(c => c.Avaliacoes)
+        .ToListAsync();
 
     public async Task<Clinica?> ObterPorIdAsync(Guid id)
         => await _context.Clinicas
