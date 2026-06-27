@@ -17,6 +17,7 @@ public class AvaliacaoRepository : IAvaliacaoRepository
     public async Task<IEnumerable<Avaliacao>> ObterPorClinicaAsync(Guid clinicaId)
         => await _context.Avaliacoes
             .Include(a => a.Usuario)
+            .Include(a => a.Clinica)
             .Where(a => a.ClinicaId == clinicaId)
             .OrderByDescending(a => a.DataCriacao)
             .ToListAsync();
