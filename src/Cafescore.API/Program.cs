@@ -85,10 +85,11 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-// Seed do banco de dados
+// Aplicar migrations e seed do banco de dados
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await context.Database.MigrateAsync();
     await DatabaseSeeder.SeedAsync(context);
 }
 
