@@ -7,7 +7,7 @@ using Cafescore.Domain.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Cafescore.Application.Services;
+namespace Cafescore.API.Services;
 
 public class AuthService
 {

@@ -1,5 +1,5 @@
 ﻿using Cafescore.Application.DTOs.Auth;
-using Cafescore.Application.Services;
+using Cafescore.API.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cafescore.API.Controllers;

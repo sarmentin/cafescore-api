@@ -1,5 +1,6 @@
 ﻿using Cafescore.Application.DTOs.Auth;
 using Cafescore.Application.Services;
+using Cafescore.API.Services;
 using Cafescore.Domain.Entities;
 using Cafescore.Domain.Interfaces;
 using Microsoft.Extensions.Configuration;
