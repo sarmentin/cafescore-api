@@ -1,0 +1,131 @@
+# flyctl launch added from .gitignore
+## Caféscore — .gitignore
+## Gerado com `dotnet new gitignore` e otimizado para o projeto
+
+# ==========================================
+# SEGURANÇA — NUNCA SUBIR PARA O GITHUB
+# ==========================================
+**/**/appsettings.Development.json
+**/**/appsettings.Production.json
+**/.env
+**/*.pfx
+**/*.publishsettings
+
+# ==========================================
+# .NET / BUILD
+# ==========================================
+**/[Dd]ebug
+**/[Dd]ebugPublic
+**/[Rr]elease
+**/[Rr]eleases
+**/x64
+**/x86
+**/[Ww][Ii][Nn]32
+**/[Aa][Rr][Mm]
+**/[Aa][Rr][Mm]64
+**/bld
+**/[Bb]in
+**/[Oo]bj
+**/[Ll]og
+**/[Ll]ogs
+**/artifacts
+**/project.lock.json
+**/project.fragment.lock.json
+
+# ==========================================
+# VISUAL STUDIO
+# ==========================================
+**/.vs
+**/*.rsuser
+**/*.suo
+**/*.user
+**/*.userosscache
+**/*.sln.docstates
+**/*.userprefs
+**/Generated\ Files
+**/ScaffoldingReadMe.txt
+**/*_wpftmp.csproj
+
+# ==========================================
+# TESTES E COBERTURA
+# ==========================================
+**/[Tt]est[Rr]esult*
+**/[Bb]uild[Ll]og.*
+**/TestResult.xml
+**/nunit-*.xml
+**/coverage*.json
+**/coverage*.xml
+**/coverage*.info
+**/*.coverage
+**/*.coveragexml
+**/BenchmarkDotNet.Artifacts
+
+# ==========================================
+# NUGET
+# ==========================================
+**/*.nupkg
+**/*.snupkg
+**/**/[Pp]ackages/*
+!**/**/[Pp]ackages/build
+**/*.nuget.props
+**/*.nuget.targets
+
+# ==========================================
+# SQL SERVER
+# ==========================================
+**/*.mdf
+**/*.ldf
+**/*.ndf
+
+# ==========================================
+# NODE / ANGULAR (frontend)
+# ==========================================
+**/node_modules
+**/dist
+**/.angular
+
+# ==========================================
+# VS CODE
+# ==========================================
+**/.vscode/*
+!**/.vscode/settings.json
+!**/.vscode/tasks.json
+!**/.vscode/launch.json
+!**/.vscode/extensions.json
+**/*.code-workspace
+**/.history
+
+# ==========================================
+# JETBRAINS RIDER
+# ==========================================
+**/.idea
+**/*.sln.iml
+
+# ==========================================
+# SISTEMA OPERACIONAL
+# ==========================================
+# Windows
+**/Thumbs.db
+**/ehthumbs.db
+**/[Dd]esktop.ini
+**/$RECYCLE.BIN
+**/*.lnk
+**/*.stackdump
+
+# macOS
+**/.DS_Store
+**/.AppleDouble
+**/.LSOverride
+**/._*
+**/.Spotlight-V100
+**/.Trashes
+
+# ==========================================
+# OUTROS
+# ==========================================
+**/*.tmp
+**/*.log
+**/*.tlog
+**/*.swp
+**/~$*
+fly.toml
