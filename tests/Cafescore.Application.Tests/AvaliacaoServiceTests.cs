@@ -1,6 +1,7 @@
 ﻿using Cafescore.Application.DTOs.Avaliacao;
 using Cafescore.Application.Services;
 using Cafescore.Domain.Entities;
+using Cafescore.Domain.Exceptions;
 using Cafescore.Domain.Interfaces;
 using Moq;
 
@@ -70,7 +71,7 @@ public class AvaliacaoServiceTests
             .ReturnsAsync((Clinica?)null);
 
         // Act & Assert
-        await Assert.ThrowsAsync<Exception>(
+        await Assert.ThrowsAsync<RegraDeNegocioException>(
             () => _avaliacaoService.CriarAsync(dto, Guid.NewGuid()));
     }
 
@@ -119,7 +120,7 @@ public class AvaliacaoServiceTests
             .ReturnsAsync((Avaliacao?)null);
 
         // Act & Assert
-        await Assert.ThrowsAsync<Exception>(
+        await Assert.ThrowsAsync<RegraDeNegocioException>(
             () => _avaliacaoService.RemoverAsync(Guid.NewGuid(), Guid.NewGuid()));
     }
 }

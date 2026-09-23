@@ -2,6 +2,7 @@
 using Cafescore.Application.Services;
 using Cafescore.API.Services;
 using Cafescore.Domain.Entities;
+using Cafescore.Domain.Exceptions;
 using Cafescore.Domain.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Moq;
@@ -20,7 +21,7 @@ public class AuthServiceTests
         _configurationMock = new Mock<IConfiguration>();
 
         _configurationMock.Setup(c => c["Jwt:Key"])
-            .Returns("CafescoreApp@2026#SecretKey!MtSdH");
+            .Returns("ChaveDeTesteSomenteParaTestesUnitarios123456");
         _configurationMock.Setup(c => c["Jwt:Issuer"])
             .Returns("cafescore-api");
         _configurationMock.Setup(c => c["Jwt:Audience"])
@@ -76,7 +77,7 @@ public class AuthServiceTests
             .ReturnsAsync(true);
 
         // Act & Assert
-        await Assert.ThrowsAsync<Exception>(
+        await Assert.ThrowsAsync<RegraDeNegocioException>(
             () => _authService.RegistrarAsync(dto));
     }
 
@@ -123,7 +124,7 @@ public class AuthServiceTests
             .ReturnsAsync(usuario);
 
         // Act & Assert
-        await Assert.ThrowsAsync<Exception>(
+        await Assert.ThrowsAsync<RegraDeNegocioException>(
             () => _authService.LoginAsync(dto));
     }
 
@@ -142,7 +143,7 @@ public class AuthServiceTests
             .ReturnsAsync((Usuario?)null);
 
         // Act & Assert
-        await Assert.ThrowsAsync<Exception>(
+        await Assert.ThrowsAsync<RegraDeNegocioException>(
             () => _authService.LoginAsync(dto));
     }
 }

@@ -3,11 +3,13 @@ using Cafescore.Application.DTOs.Avaliacao;
 using Cafescore.Application.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace Cafescore.API.Controllers;
 
 [ApiController]
 [Route("api/avaliacoes")]
+[EnableRateLimiting("geral")]
 public class AvaliacoesController : ControllerBase
 {
     private readonly AvaliacaoService _avaliacaoService;
@@ -17,12 +19,14 @@ public class AvaliacoesController : ControllerBase
         _avaliacaoService = avaliacaoService;
     }
 
+    private Guid UsuarioIdLogado =>
+        Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
     [HttpGet("minhas")]
     [Authorize]
     public async Task<IActionResult> ObterMinhas()
     {
-        var usuarioId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-        var avaliacoes = await _avaliacaoService.ObterPorUsuarioAsync(usuarioId);
+        var avaliacoes = await _avaliacaoService.ObterPorUsuarioAsync(UsuarioIdLogado);
         return Ok(avaliacoes);
     }
 
@@ -30,55 +34,23 @@ public class AvaliacoesController : ControllerBase
     [Authorize]
     public async Task<IActionResult> Criar([FromBody] CriarAvaliacaoDto dto)
     {
-        try
-        {
-            var usuarioId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-            var avaliacao = await _avaliacaoService.CriarAsync(dto, usuarioId);
-            return CreatedAtAction(nameof(ObterMinhas), avaliacao);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new { mensagem = ex.Message });
-        }
+        var avaliacao = await _avaliacaoService.CriarAsync(dto, UsuarioIdLogado);
+        return CreatedAtAction(nameof(ObterMinhas), avaliacao);
     }
 
     [HttpPut("{id}")]
     [Authorize]
     public async Task<IActionResult> Atualizar(Guid id, [FromBody] AtualizarAvaliacaoDto dto)
     {
-        try
-        {
-            var usuarioId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-            await _avaliacaoService.AtualizarAsync(id, dto, usuarioId);
-            return NoContent();
-        }
-        catch (UnauthorizedAccessException)
-        {
-            return Forbid();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new { mensagem = ex.Message });
-        }
+        await _avaliacaoService.AtualizarAsync(id, dto, UsuarioIdLogado);
+        return NoContent();
     }
 
     [HttpDelete("{id}")]
     [Authorize]
     public async Task<IActionResult> Remover(Guid id)
     {
-        try
-        {
-            var usuarioId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-            await _avaliacaoService.RemoverAsync(id, usuarioId);
-            return NoContent();
-        }
-        catch (UnauthorizedAccessException)
-        {
-            return Forbid();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new { mensagem = ex.Message });
-        }
+        await _avaliacaoService.RemoverAsync(id, UsuarioIdLogado);
+        return NoContent();
     }
 }

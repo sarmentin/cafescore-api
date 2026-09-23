@@ -1,11 +1,12 @@
-﻿using Cafescore.Application.DTOs.Avaliacao;
-using Cafescore.Application.Services;
+﻿using Cafescore.Application.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace Cafescore.API.Controllers;
 
 [ApiController]
 [Route("api/clinicas")]
+[EnableRateLimiting("geral")]
 public class ClinicasController : ControllerBase
 {
     private readonly ClinicaService _clinicaService;
@@ -27,15 +28,8 @@ public class ClinicasController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> ObterPorId(Guid id)
     {
-        try
-        {
-            var clinica = await _clinicaService.ObterPorIdAsync(id);
-            return Ok(clinica);
-        }
-        catch (Exception ex)
-        {
-            return NotFound(new { mensagem = ex.Message });
-        }
+        var clinica = await _clinicaService.ObterPorIdAsync(id);
+        return Ok(clinica);
     }
 
     [HttpGet("{id}/avaliacoes")]

@@ -1,5 +1,6 @@
 ﻿using Cafescore.Application.DTOs.Avaliacao;
 using Cafescore.Domain.Entities;
+using Cafescore.Domain.Exceptions;
 using Cafescore.Domain.Interfaces;
 
 namespace Cafescore.Application.Services;
@@ -52,7 +53,7 @@ public class AvaliacaoService
     public async Task<AvaliacaoDto> CriarAsync(CriarAvaliacaoDto dto, Guid usuarioId)
     {
         var clinica = await _clinicaRepository.ObterPorIdAsync(dto.ClinicaId)
-            ?? throw new Exception("Clínica não encontrada");
+            ?? throw new RegraDeNegocioException("Clínica não encontrada");
 
         var avaliacao = new Avaliacao(usuarioId, dto.ClinicaId, dto.Nota, dto.Comentario);
 
@@ -73,7 +74,7 @@ public class AvaliacaoService
     public async Task AtualizarAsync(Guid id, AtualizarAvaliacaoDto dto, Guid usuarioId)
     {
         var avaliacao = await _avaliacaoRepository.ObterPorIdAsync(id)
-            ?? throw new Exception("Avaliação não encontrada");
+            ?? throw new RegraDeNegocioException("Avaliação não encontrada");
 
         if (avaliacao.UsuarioId != usuarioId)
             throw new UnauthorizedAccessException("Você não tem permissão para editar esta avaliação");
@@ -85,7 +86,7 @@ public class AvaliacaoService
     public async Task RemoverAsync(Guid id, Guid usuarioId)
     {
         var avaliacao = await _avaliacaoRepository.ObterPorIdAsync(id)
-            ?? throw new Exception("Avaliação não encontrada");
+            ?? throw new RegraDeNegocioException("Avaliação não encontrada");
 
         if (avaliacao.UsuarioId != usuarioId)
             throw new UnauthorizedAccessException("Você não tem permissão para excluir esta avaliação");

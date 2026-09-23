@@ -1,4 +1,5 @@
 ﻿using Cafescore.Application.DTOs.Clinica;
+using Cafescore.Domain.Exceptions;
 using Cafescore.Domain.Interfaces;
 
 namespace Cafescore.Application.Services;
@@ -32,7 +33,7 @@ public class ClinicaService
     public async Task<ClinicaDto> ObterPorIdAsync(Guid id)
     {
         var clinica = await _clinicaRepository.ObterPorIdAsync(id)
-            ?? throw new Exception("Clínica não encontrada");
+            ?? throw new RegraDeNegocioException("Clínica não encontrada");
 
         return new ClinicaDto
         {

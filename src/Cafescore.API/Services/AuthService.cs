@@ -6,6 +6,7 @@ using Cafescore.Domain.Entities;
 using Cafescore.Domain.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Cafescore.Domain.Exceptions;
 
 namespace Cafescore.API.Services;
 
@@ -23,7 +24,7 @@ public class AuthService
     public async Task<TokenDto> RegistrarAsync(RegistrarUsuarioDto dto)
     {
         if (await _usuarioRepository.EmailExisteAsync(dto.Email))
-            throw new Exception("Email já cadastrado");
+            throw new RegraDeNegocioException("Não foi possível criar a conta com esses dados");
 
         var senhaHash = BCrypt.Net.BCrypt.HashPassword(dto.Senha);
         var usuario = new Usuario(dto.Nome, dto.Email, senhaHash);
@@ -36,10 +37,10 @@ public class AuthService
     public async Task<TokenDto> LoginAsync(LoginDto dto)
     {
         var usuario = await _usuarioRepository.ObterPorEmailAsync(dto.Email)
-            ?? throw new Exception("Email ou senha inválidos");
+            ?? throw new RegraDeNegocioException("Email ou senha inválidos");
 
         if (!BCrypt.Net.BCrypt.Verify(dto.Senha, usuario.SenhaHash))
-            throw new Exception("Email ou senha inválidos");
+            throw new RegraDeNegocioException("Email ou senha inválidos");
 
         return GerarToken(usuario);
     }
