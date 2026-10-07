@@ -29,9 +29,15 @@ public class AuthService
         var senhaHash = BCrypt.Net.BCrypt.HashPassword(dto.Senha);
         var usuario = new Usuario(dto.Nome, dto.Email, senhaHash);
 
+        // Gera o token ANTES de gravar. Se a geração falhar — chave JWT curta,
+        // configuração ausente — nada foi persistido e a pessoa pode tentar de
+        // novo. Na ordem inversa, a conta ficava no banco e o token nunca
+        // chegava: foi assim que surgiram as contas órfãs que você apagou.
+        var token = GerarToken(usuario);
+
         await _usuarioRepository.AdicionarAsync(usuario);
 
-        return GerarToken(usuario);
+        return token;
     }
 
     public async Task<TokenDto> LoginAsync(LoginDto dto)

@@ -6,7 +6,6 @@ using Cafescore.Application.Services;
 using Cafescore.Domain.Interfaces;
 using Cafescore.Infrastructure.Data;
 using Cafescore.Infrastructure.Repositories;
-using Cafescore.Infrastructure.Seed;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -131,7 +130,6 @@ using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     await context.Database.MigrateAsync();
-    await DatabaseSeeder.SeedAsync(context);
 }
 
 // Tratamento centralizado de exceções — primeiro do pipeline
