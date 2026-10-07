@@ -30,6 +30,12 @@ public class AppDbContext : DbContext
             entity.Property(c => c.Nome).IsRequired().HasMaxLength(150);
             entity.Property(c => c.Endereco).IsRequired().HasMaxLength(250);
             entity.Property(c => c.Cidade).IsRequired().HasMaxLength(100);
+
+            // Identificador no OpenStreetMap: tamanho limitado e único.
+            // Nulo é permitido (clínicas cadastradas manualmente), e no
+            // PostgreSQL vários nulos convivem com um índice único.
+            entity.Property(c => c.OsmId).HasMaxLength(50);
+            entity.HasIndex(c => c.OsmId).IsUnique();
         });
 
         modelBuilder.Entity<Avaliacao>(entity =>
@@ -37,6 +43,9 @@ public class AppDbContext : DbContext
             entity.HasKey(a => a.Id);
             entity.Property(a => a.Nota).IsRequired();
             entity.Property(a => a.Comentario).IsRequired().HasMaxLength(500);
+
+            // URL pública da foto no Supabase Storage.
+            entity.Property(a => a.UrlFoto).HasMaxLength(500);
 
             entity.HasOne(a => a.Usuario)
                   .WithMany(u => u.Avaliacoes)

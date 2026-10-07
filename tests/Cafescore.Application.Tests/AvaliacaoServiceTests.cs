@@ -29,7 +29,7 @@ public class AvaliacaoServiceTests
         // Arrange
         var clinicaId = Guid.NewGuid();
         var usuarioId = Guid.NewGuid();
-        var clinica = new Clinica("Clínica Teste", "Rua Teste, 100", "São Paulo");
+        var clinica = new Clinica("Clínica Teste", "Rua Teste, 100", "São Paulo", -23.5505, -46.6333);
 
         var dto = new CriarAvaliacaoDto
         {
