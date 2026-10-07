@@ -15,12 +15,40 @@ public class ClinicaRepository : IClinicaRepository
     }
 
     public async Task<IEnumerable<Clinica>> ObterTodasAsync()
-    => await _context.Clinicas
-        .Include(c => c.Avaliacoes)
-        .ToListAsync();
+        => await _context.Clinicas
+            .Include(c => c.Avaliacoes)
+            .ToListAsync();
 
     public async Task<Clinica?> ObterPorIdAsync(Guid id)
         => await _context.Clinicas
             .Include(c => c.Avaliacoes)
             .FirstOrDefaultAsync(c => c.Id == id);
+
+    public async Task<IEnumerable<Clinica>> ObterPorOsmIdsAsync(IEnumerable<string> osmIds)
+    {
+        var ids = osmIds.ToList();
+
+        if (ids.Count == 0)
+            return new List<Clinica>();
+
+        return await _context.Clinicas
+            .Include(c => c.Avaliacoes)
+            .Where(c => c.OsmId != null && ids.Contains(c.OsmId))
+            .ToListAsync();
+    }
+
+    public async Task AdicionarVariasAsync(IEnumerable<Clinica> clinicas)
+    {
+        await _context.Clinicas.AddRangeAsync(clinicas);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<IEnumerable<Clinica>> ObterNaAreaAsync(
+    double latitudeMinima, double latitudeMaxima,
+    double longitudeMinima, double longitudeMaxima)
+    => await _context.Clinicas
+        .Include(c => c.Avaliacoes)
+        .Where(c => c.Latitude >= latitudeMinima && c.Latitude <= latitudeMaxima
+                 && c.Longitude >= longitudeMinima && c.Longitude <= longitudeMaxima)
+        .ToListAsync();
 }

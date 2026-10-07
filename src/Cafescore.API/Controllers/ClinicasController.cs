@@ -25,14 +25,27 @@ public class ClinicasController : ControllerBase
         return Ok(clinicas);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("proximas")]
+    public async Task<IActionResult> ObterProximas(
+        [FromQuery] double lat,
+        [FromQuery] double lng,
+        [FromQuery] int raio = 3000,
+        CancellationToken cancellationToken = default)
+    {
+        var clinicas = await _clinicaService
+            .BuscarProximasAsync(lat, lng, raio, cancellationToken);
+
+        return Ok(clinicas);
+    }
+
+    [HttpGet("{id:guid}")]
     public async Task<IActionResult> ObterPorId(Guid id)
     {
         var clinica = await _clinicaService.ObterPorIdAsync(id);
         return Ok(clinica);
     }
 
-    [HttpGet("{id}/avaliacoes")]
+    [HttpGet("{id:guid}/avaliacoes")]
     public async Task<IActionResult> ObterAvaliacoes(Guid id)
     {
         var avaliacoes = await _avaliacaoService.ObterPorClinicaAsync(id);

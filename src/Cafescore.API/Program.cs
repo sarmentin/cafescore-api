@@ -10,6 +10,7 @@ using Cafescore.Infrastructure.Seed;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Cafescore.Infrastructure.ExternalServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -66,6 +67,14 @@ builder.Services.AddScoped<IAvaliacaoRepository, AvaliacaoRepository>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<ClinicaService>();
 builder.Services.AddScoped<AvaliacaoService>();
+
+// Fonte externa de clínicas (OpenStreetMap via Overpass API)
+builder.Services.AddHttpClient<IFonteDeClinicas, OverpassFonteDeClinicas>(client =>
+{
+    client.Timeout = TimeSpan.FromSeconds(60);
+    client.DefaultRequestHeaders.UserAgent.ParseAdd(
+        "Cafescore/1.0 (+https://cafescore-app.vercel.app)");
+});
 
 // JWT
 var jwtKey = builder.Configuration["Jwt:Key"]!;
